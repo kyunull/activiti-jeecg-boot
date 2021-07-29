@@ -200,7 +200,7 @@
         // WebSocket与普通的请求所用协议有所不同，ws等同于http，wss等同于https
         var userId = store.getters.userInfo.id;
         var url = window._CONFIG['domianURL'].replace("https://","wss://").replace("http://","ws://")+"/websocket/"+userId;
-        //console.log(url);
+        console.log(url);
         this.websock = new WebSocket(url);
         this.websock.onopen = this.websocketOnopen;
         this.websock.onerror = this.websocketOnerror;

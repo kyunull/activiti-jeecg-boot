@@ -40,7 +40,7 @@
                   :showUploadList="false"
                 >
                   <a-button  type="primary"> <a-icon type="upload" /> 上传模型 </a-button>
-                </a-upload>              
+                </a-upload>
             </a-col>
             <a-col :md="12" :sm="12" >
                 <a-button type="primary"  @click="createObj.visible=true" icon="search">创建模型</a-button>
@@ -281,7 +281,6 @@
             console.log('Cancel');
           },
         });
-
       },
       /*发布流程*/
       deployment(row){
