@@ -1,17 +1,12 @@
-package cn.tycoding.constant;
+package org.jeecg.modules.chat.constant;
 
 /**
  * 系统常量值
  *
- * @author tycoding
- * @date 2019-06-14
+ * @author dongjb
+ * @date 2021/08/17
  */
 public interface CommonConstant {
-
-    /**
-     * 用户数据 Key前缀标识
-     */
-    String USER_PREFIX = "USER_";
 
     /**
      * 群发消息Session Key前缀标识
@@ -20,13 +15,13 @@ public interface CommonConstant {
 
     /**
      * 推送至指定用户消息
-     *      推送方Session Key前缀标识
+     * 推送方Session Key前缀标识
      */
     String CHAT_FROM_PREFIX = "CHAT_FROM_";
 
     /**
      * 推送至指定用户消息
-     *      接收方Session Key前缀标识
+     * 接收方Session Key前缀标识
      */
     String CHAT_TO_PREFIX = "_TO_";
 

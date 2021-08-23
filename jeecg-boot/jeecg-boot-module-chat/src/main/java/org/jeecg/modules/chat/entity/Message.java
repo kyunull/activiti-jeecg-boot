@@ -1,22 +1,33 @@
-package cn.tycoding.entity;
+package org.jeecg.modules.chat.entity;
 
 import lombok.Data;
+import org.jeecg.common.system.vo.LoginUser;
 
 import java.io.Serializable;
 
 /**
  * 会话消息实体
  *
- * @author tycoding
- * @date 2019-06-14
+ * @author dongjb
+ * @date 2021/08/17
  */
 @Data
-public class Message implements Serializable {
+public class Message {
 
     /**
      * 消息推送者
      */
-    private User from;
+    private String from;
+
+    /**
+     * 消息推送者头像
+     */
+    private String fromImg;
+
+    /**
+     * 消息推送者名称
+     */
+    private String fromName;
 
     /**
      * 消息内容
@@ -25,10 +36,20 @@ public class Message implements Serializable {
 
     /**
      * 消息接收者：
-     *      如果是私有（向指定窗口推送），to即为接受者User对象
-     *      如果是公共消息（群组聊天），to设为null
+     * 如果是私有（向指定窗口推送），to即为接受者User对象
+     * 如果是公共消息（群组聊天），to设为null
      */
-    private User to;
+    private String to;
+
+    /**
+     * 消息接收者头像
+     */
+    private String toImg;
+
+    /**
+     * 消息接收者名称
+     */
+    private String toName;
 
     /**
      * 创建时间

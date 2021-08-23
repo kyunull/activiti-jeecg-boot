@@ -1,4 +1,4 @@
-package cn.tycoding.exception;
+package org.jeecg.modules.chat.exception;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -6,8 +6,8 @@ import lombok.Setter;
 /**
  * 全局Runtime异常捕获
  *
- * @author tycoding
- * @date 2019-06-17
+ * @author dongjb
+ * @date 2021/08/17
  */
 public class GlobalException extends RuntimeException {
 

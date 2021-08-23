@@ -1,6 +1,7 @@
 package org.jeecg.modules.system.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -52,6 +53,7 @@ public class SysOnlineController {
     @Resource
     private BaseCommonService baseCommonService;
 
+    @ApiOperation(value = "在线用户列表", tags = "在线用户")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public Result<Page<SysOnlineVO>> list(@RequestParam(name="username", required=false) String username, @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
                                           @RequestParam(name="pageSize", defaultValue="10") Integer pageSize) {

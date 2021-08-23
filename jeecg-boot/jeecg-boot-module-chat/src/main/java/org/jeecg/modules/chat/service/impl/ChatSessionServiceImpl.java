@@ -1,13 +1,12 @@
-package cn.tycoding.service.impl;
+package org.jeecg.modules.chat.service.impl;
 
-import cn.tycoding.constant.CommonConstant;
-import cn.tycoding.entity.Message;
-import cn.tycoding.entity.User;
-import cn.tycoding.service.ChatSessionService;
-import cn.tycoding.utils.CoreUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
+import org.jeecg.modules.chat.constant.CommonConstant;
+import org.jeecg.modules.chat.entity.Message;
+import org.jeecg.modules.chat.service.ChatSessionService;
+import org.jeecg.modules.chat.utils.CoreUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -15,8 +14,10 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 /**
- * @author tycoding
- * @date 2019-06-14
+ * 服务实现
+ *
+ * @author dongjb
+ * @date 2021/08/17
  */
 @Slf4j
 @Service
@@ -26,36 +27,25 @@ public class ChatSessionServiceImpl implements ChatSessionService {
     private StringRedisTemplate redisTemplate;
 
     @Override
-    public User findById(String id) {
-        if (id != null) {
-            String value = null;
-            if (id.startsWith(CommonConstant.USER_PREFIX)) {
-                value = redisTemplate.boundValueOps(id).get();
-            } else {
-                value = redisTemplate.boundValueOps(CommonConstant.USER_PREFIX + id).get();
-            }
-            JSONObject object = JSONObject.parseObject(value);
-            if (object != null) {
-                return object.toJavaObject(User.class);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public void pushMessage(String fromId, String toId, String message) {
+    public void pushMessage(String fromId, String fromImg, String fromName, String toId, String toImg, String toName, String message) {
         Message entity = new Message();
         entity.setMessage(message);
-        entity.setFrom(this.findById(fromId));
+        entity.setFrom(fromId);
+        entity.setFromImg(fromImg);
+        entity.setFromName(fromName);
         entity.setTime(CoreUtil.format(new Date()));
-        if (toId != null) {
+        if (!toId.equals("0")) {
             //查询接收方信息
-            entity.setTo(this.findById(toId));
+            entity.setTo(toId);
+            entity.setToImg(toImg);
+            entity.setToName(toName);
             //单个用户推送
             push(entity, CommonConstant.CHAT_FROM_PREFIX + fromId + CommonConstant.CHAT_TO_PREFIX + toId);
         } else {
             //公共消息 -- 群组
             entity.setTo(null);
+            entity.setToImg(null);
+            entity.setToName(null);
             push(entity, CommonConstant.CHAT_COMMON_PREFIX + fromId);
         }
     }
@@ -71,27 +61,12 @@ public class ChatSessionServiceImpl implements ChatSessionService {
         //但一个用户可能推送很多消息，VALUE应该是数组
         List<Message> list = new ArrayList<>();
         String value = redisTemplate.boundValueOps(key).get();
-        if (value == null) {
-            //第一次推送消息
-            list.add(entity);
-        } else {
-            //第n次推送消息
+        //非第一次推送消息
+        if (value != null) {
             list = Objects.requireNonNull(JSONObject.parseArray(value)).toJavaList(Message.class);
-            list.add(entity);
         }
+        list.add(entity);
         redisTemplate.boundValueOps(key).set(JSONObject.toJSONString(list));
-    }
-
-    @Override
-    public List<User> onlineList() {
-        List<User> list = new ArrayList<>();
-        Set<String> keys = redisTemplate.keys(CommonConstant.USER_PREFIX + CommonConstant.REDIS_MATCH_PREFIX);
-        if (keys != null && keys.size() > 0) {
-            keys.forEach(key -> {
-                list.add(this.findById(key));
-            });
-        }
-        return list;
     }
 
     @Override
@@ -134,11 +109,4 @@ public class ChatSessionServiceImpl implements ChatSessionService {
         }
     }
 
-    @Override
-    public void delete(String id) {
-        if (id != null) {
-            log.info("从Redis中删除此Key: " + id);
-            redisTemplate.delete(CommonConstant.USER_PREFIX + id);
-        }
-    }
 }

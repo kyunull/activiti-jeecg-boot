@@ -1,6 +1,6 @@
-package cn.tycoding.utils;
+package org.jeecg.modules.chat.utils;
 
-import cn.tycoding.entity.Message;
+import org.jeecg.modules.chat.entity.Message;
 
 import java.text.SimpleDateFormat;
 import java.util.Comparator;
@@ -8,8 +8,10 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * @author tycoding
- * @date 2019-06-15
+ * 工具类
+ *
+ * @author dongjb
+ * @date 2021/08/17
  */
 public class CoreUtil {
 
@@ -23,10 +25,10 @@ public class CoreUtil {
     }
 
     /**
-     * format date
+     * 格式化日期
      *
-     * @param date
-     * @return
+     * @param date 需格式化的日期
+     * @return 日期字符串
      */
     public static String format(Date date) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

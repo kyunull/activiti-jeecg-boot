@@ -1,23 +1,16 @@
-package cn.tycoding.service;
+package org.jeecg.modules.chat.service;
 
-import cn.tycoding.entity.Message;
-import cn.tycoding.entity.User;
+import org.jeecg.modules.chat.entity.Message;
 
 import java.util.List;
 
 /**
- * @author tycoding
- * @date 2019-06-14
+ * 服务
+ *
+ * @author dongjb
+ * @date 2021/08/17
  */
 public interface ChatSessionService {
-
-    /**
-     * 根据ID从Redis中查询数据
-     *
-     * @param id
-     * @return User对象
-     */
-    User findById(String id);
 
     /**
      * 推送消息，储存到Redis数据库中
@@ -26,19 +19,12 @@ public interface ChatSessionService {
      * @param toId    接收方ID
      * @param message 消息
      */
-    void pushMessage(String fromId, String toId, String message);
-
-    /**
-     * 获取在线用户列表
-     *
-     * @return
-     */
-    List<User> onlineList();
+    void pushMessage(String fromId, String fromImg, String fromName, String toId, String toImg, String toName, String message);
 
     /**
      * 获取公共消息内容 -- 群组
      *
-     * @return
+     * @return 群组消息内容
      */
     List<Message> commonList();
 
@@ -47,14 +33,8 @@ public interface ChatSessionService {
      *
      * @param fromId 推送方ID
      * @param toId   接收方ID
-     * @return
+     * @return 消息列表
      */
     List<Message> selfList(String fromId, String toId);
 
-    /**
-     * 删除指定ID在Redis中储存的数据
-     *
-     * @param id
-     */
-    void delete(String id);
 }

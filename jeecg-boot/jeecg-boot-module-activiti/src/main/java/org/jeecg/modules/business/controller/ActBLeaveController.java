@@ -35,14 +35,16 @@ import com.alibaba.fastjson.JSON;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.jeecg.common.aspect.annotation.AutoLog;
+import springfox.documentation.annotations.ApiIgnore;
 
- /**
+/**
  * @Description: 请假流程表单
  * @Author: jeecg-boot
  * @Date:   2021-06-09
  * @Version: V1.0
  */
 @Api(tags="请假流程表单")
+@ApiIgnore
 @RestController
 @RequestMapping("/business/actBLeave")
 @Slf4j
