@@ -1,20 +1,10 @@
-/**
- * FileName: WebrtcMessage
- * Author:   10418
- * Date:     2020-05-16 18:09
- * Description: ws接受webrtc消息类
- * History:
- * <author>          <time>          <version>          <desc>
- * 楠楠(Nannan)
- */
-package cn.nicenan.meeting.bean;
+package org.jeecg.modules.chat.entity;
 
 /**
- * DESC〈一句话功能简述〉<br>
- * 〈ws接受webrtc消息类〉
+ * ws接受webrtc消息类
  *
- * @author 10418
- * @create 2020-05-16
+ * @author dongjb
+ * @date 2020/05/16
  * @since 1.0.0
  */
 public class WebrtcMessage {

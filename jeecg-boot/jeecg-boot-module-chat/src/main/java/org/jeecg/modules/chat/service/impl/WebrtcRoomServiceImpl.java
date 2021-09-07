@@ -1,23 +1,15 @@
-/**
- * FileName: WebrtcRoomServiceImpl
- * Author:   10418
- * Date:     2020-05-16 19:53
- * Description:
- * History:
- * <author>          <time>          <version>          <desc>
- * 楠楠(Nannan)
- */
-package cn.nicenan.meeting.service.impl;
+package org.jeecg.modules.chat.service.impl;
 
-import cn.nicenan.meeting.bean.WebrtcMessage;
-import cn.nicenan.meeting.model.User;
-import cn.nicenan.meeting.service.UserService;
-import cn.nicenan.meeting.service.WebrtcRoomService;
-import cn.nicenan.meeting.util.JwtTokenUtil;
-import cn.nicenan.meeting.websocket.WebrtcWS;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
+import org.jeecg.common.system.api.ISysBaseAPI;
+import org.jeecg.common.system.util.JwtUtil;
+import org.jeecg.common.system.vo.LoginUser;
+import org.jeecg.modules.chat.controller.WebrtcWS;
+import org.jeecg.modules.chat.entity.WebrtcMessage;
+import org.jeecg.modules.chat.service.WebrtcRoomService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,21 +19,21 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+
 /**
- * DESC〈一句话功能简述〉<br>
- * 〈〉
+ * 房间管理服务实现
  *
- * @author 10418
- * @create 2020-05-16
+ * @author dongjb
+ * @date 2021/09/07
  * @since 1.0.0
  */
 @Service
 public class WebrtcRoomServiceImpl implements WebrtcRoomService {
-    private final static Logger logger = LoggerFactory.getLogger(WebrtcRoomServiceImpl.class);
-    private Map<String, Map<String, WebrtcWS>> rooms = new ConcurrentHashMap<>();
-    private Map<String, String> roomsPw = new ConcurrentHashMap<>();
     @Autowired
-    private UserService userService;
+    private ISysBaseAPI sysBaseAPI;
+    private final static Logger logger = LoggerFactory.getLogger(WebrtcRoomServiceImpl.class);
+    private final Map<String, Map<String, WebrtcWS>> rooms = new ConcurrentHashMap<>();
+    private final Map<String, String> roomsPw = new ConcurrentHashMap<>();
 
     @Override
     public int countOfUserInRoom(String roomId) {
@@ -73,7 +65,10 @@ public class WebrtcRoomServiceImpl implements WebrtcRoomService {
 
     @Override
     public boolean enterRoom(String roomId, String roomPw, String token, WebrtcWS webrtcWS, String nickname) throws Exception {
-        String userId = String.valueOf(new JwtTokenUtil().getUserIdFromToken(token));
+//        String userId = String.valueOf(new JwtTokenUtil().getUserIdFromToken(token));
+        //获取登录用户信息
+        LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+        String userId = sysUser.getId();
         if (userId.equals("0")) {
             throw new Exception("身份验证失败");
         } else {
@@ -84,7 +79,7 @@ public class WebrtcRoomServiceImpl implements WebrtcRoomService {
             throw new Exception("房间不存在");
         } else {
             if (roomsPw.get(roomId).equals(roomPw)) {
-                userService.update(new User(Long.parseLong(userId), nickname), new QueryWrapper<User>().lambda().eq(User::getId, userId));
+//                userService.update(new User(Long.parseLong(userId), nickname), new QueryWrapper<User>().lambda().eq(User::getId, userId));
                 webrtcWS.setRoomId(roomId);
                 room.put(userId, webrtcWS);
                 webrtcWS.getSession().getBasicRemote().sendText(new ObjectMapper().writeValueAsString(new WebrtcMessage(WebrtcMessage.TYPE_COMMAND_SUCCESS, userId, roomId, "enter")));
@@ -98,7 +93,9 @@ public class WebrtcRoomServiceImpl implements WebrtcRoomService {
 
     @Override
     public boolean createRoom(String roomId, String roomPw, String token, WebrtcWS webrtcWS, String nickname) throws Exception {
-        String userId = String.valueOf(new JwtTokenUtil().getUserIdFromToken(token));
+        //获取登录用户信息
+        LoginUser sysUser = getUserInfoByToken(token);
+        String userId = sysUser.getId();
         if (userId.equals("0")) {
             throw new Exception("身份验证失败");
         } else {
@@ -106,7 +103,7 @@ public class WebrtcRoomServiceImpl implements WebrtcRoomService {
         }
         Map<String, WebrtcWS> room = rooms.get(roomId);
         if (room == null) {
-            userService.update(new User(Long.parseLong(userId), nickname), new QueryWrapper<User>().lambda().eq(User::getId, userId));
+//            userService.update(new User(Long.parseLong(userId), nickname), new QueryWrapper<User>().lambda().eq(User::getId, userId));
             Map<String, WebrtcWS> newRoom = new ConcurrentHashMap<>();
             //把自己创建人添加到房间
             webrtcWS.setRoomId(roomId);
@@ -135,7 +132,7 @@ public class WebrtcRoomServiceImpl implements WebrtcRoomService {
         Map<String, WebrtcWS> room = rooms.get(roomId);
         StringBuffer stringBuffer = new StringBuffer();
         if (room.size() > 0) {
-            room.forEach((k, v) -> stringBuffer.append(k + "\n"));
+            room.forEach((k, v) -> stringBuffer.append(k).append("\n"));
         }
         return stringBuffer.toString();
     }
@@ -173,6 +170,25 @@ public class WebrtcRoomServiceImpl implements WebrtcRoomService {
             return false;
         }
         return true;
+    }
+
+    public LoginUser getUserInfoByToken(String token) {
+        // 解密获得username，用于和数据库进行对比
+        String username = JwtUtil.getUsername(token);
+        if (username == null) {
+            throw new AuthenticationException("Token非法无效!");
+        }
+
+        // 查询用户信息
+        LoginUser user = sysBaseAPI.getUserByName(username);
+        if (user == null) {
+            throw new AuthenticationException("用户不存在!");
+        }
+        // 判断用户状态
+        if (user.getStatus() != 1) {
+            throw new AuthenticationException("账号已锁定,请联系管理员!");
+        }
+        return user;
     }
 
 }

@@ -7,6 +7,7 @@ import Storage from 'vue-ls'
 import router from './router'
 import store from './store/'
 import { VueAxios } from "@/utils/request"
+import './icons/index' // icon
 
 // import ElementUI from 'element-ui'
 import { Button, 
@@ -20,7 +21,11 @@ import { Button,
   Timeline,
   TimelineItem,
   ButtonGroup,
-  Loading
+  Loading,
+  Radio,
+  Header,
+  Main,
+  Aside
 } from 'element-ui'
 import locale from 'element-ui/lib/locale/lang/zh-CN'
 import 'element-ui/lib/theme-chalk/index.css'
@@ -36,8 +41,10 @@ Vue.use(Timeline)
 Vue.use(TimelineItem)
 Vue.use(ButtonGroup)
 Vue.use(Loading)
-
-
+Vue.use(Radio)
+Vue.use(Header)
+Vue.use(Main)
+Vue.use(Aside)
 require('@jeecg/antd-online-mini')
 require('@jeecg/antd-online-mini/dist/OnlineForm.css')
 

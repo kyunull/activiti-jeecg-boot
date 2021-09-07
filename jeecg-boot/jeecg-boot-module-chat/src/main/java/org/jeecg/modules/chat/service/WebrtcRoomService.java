@@ -1,24 +1,14 @@
-/**
- * FileName: WebrtcRoomService
- * Author:   10418
- * Date:     2020-05-16 19:40
- * Description: 房间管理
- * History:
- * <author>          <time>          <version>          <desc>
- * 楠楠(Nannan)
- */
-package cn.nicenan.meeting.service;
+package org.jeecg.modules.chat.service;
 
-import cn.nicenan.meeting.bean.WebrtcMessage;
-import cn.nicenan.meeting.websocket.WebrtcWS;
+import org.jeecg.modules.chat.controller.WebrtcWS;
+import org.jeecg.modules.chat.entity.WebrtcMessage;
 import org.springframework.stereotype.Service;
 
 /**
- * DESC〈一句话功能简述〉<br>
- * 〈房间管理〉
+ * 房间管理服务
  *
- * @author 10418
- * @create 2020-05-16
+ * @author dongjb
+ * @date 2021/09/07
  * @since 1.0.0
  */
 @Service
@@ -34,7 +24,7 @@ public interface WebrtcRoomService {
     /**
      * 踢出用户
      *
-     * @param roomId   房间ID
+     * @param roomId 房间ID
      * @param userId userId
      * @return 成功true，失败false
      */
@@ -47,7 +37,7 @@ public interface WebrtcRoomService {
      * @param roomPw   房间密码
      * @return 成功true，失败false
      */
-    boolean enterRoom(String roomId, String roomPw, String token, WebrtcWS webrtcWS,String nickname) throws Exception;
+    boolean enterRoom(String roomId, String roomPw, String token, WebrtcWS webrtcWS, String nickname) throws Exception;
 
     /**
      * @param roomId   房间ID
@@ -56,10 +46,10 @@ public interface WebrtcRoomService {
      * @param roomPw   房间密码
      * @return 成功true，失败false
      */
-    boolean createRoom(String roomId, String roomPw, String token, WebrtcWS webrtcWS,String nickname) throws Exception;
+    boolean createRoom(String roomId, String roomPw, String token, WebrtcWS webrtcWS, String nickname) throws Exception;
 
     /**
-     * @param roomId   房间ID
+     * @param roomId 房间ID
      * @param userId 用户ID
      * @return 成功true，失败false
      */
@@ -86,9 +76,9 @@ public interface WebrtcRoomService {
     /**
      * 转发消息到指定人
      *
-     * @param roomId        房间Id
-     * @param message       要转发的消息
-     * @param userId 转发的userId
+     * @param roomId  房间Id
+     * @param message 要转发的消息
+     * @param userId  转发的userId
      * @return 是否成功
      */
     boolean forwardToOneInRoom(String roomId, WebrtcMessage message, String userId);

@@ -1,17 +1,8 @@
-/**
- * FileName: WebrtcWS
- * Author:   10418
- * Date:     2020-05-16 18:00
- * Description:
- * History:
- * <author>          <time>          <version>          <desc>
- * 楠楠(Nannan)
- */
-package cn.nicenan.meeting.websocket;
+package org.jeecg.modules.chat.controller;
 
-import cn.nicenan.meeting.bean.WebrtcMessage;
-import cn.nicenan.meeting.service.WebrtcRoomService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.jeecg.modules.chat.entity.WebrtcMessage;
+import org.jeecg.modules.chat.service.WebrtcRoomService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +14,10 @@ import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * DESC〈一句话功能简述〉<br>
- * 〈〉
+ * webrtc websocket
  *
- * @author 10418
- * @create 2020-05-16
+ * @author dongjb
+ * @date 2021/09/07
  * @since 1.0.0
  */
 @ServerEndpoint(value = "/ws/webrtc")
@@ -35,7 +25,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class WebrtcWS {
     private final static Logger logger = LoggerFactory.getLogger(WebrtcWS.class);
     //在线总人数
-    private static volatile AtomicInteger onlineCount = new AtomicInteger(0);
+    private static final AtomicInteger onlineCount = new AtomicInteger(0);
 
     private static WebrtcRoomService webrtcRoomService;
 

@@ -48,7 +48,8 @@
     "vuex": "^3.1.0",
     "vxe-table": "2.9.13",
     "vxe-table-plugin-antd": "1.8.10",
-    "xe-utils": "2.4.8"
+    "xe-utils": "2.4.8",
+    "webrtc-adapter": "^7.6.0"
   },
   "devDependencies": {
     "@babel/polyfill": "^7.2.5",
