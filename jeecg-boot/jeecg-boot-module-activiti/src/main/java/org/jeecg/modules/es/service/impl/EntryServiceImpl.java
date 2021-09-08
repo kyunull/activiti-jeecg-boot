@@ -53,12 +53,8 @@ public class EntryServiceImpl extends BaseElasticsearchService implements EntryS
                     e.printStackTrace();
                 }
             });
-        } finally {
-            try {
-                client.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        } catch (Exception e){
+            e.printStackTrace();
         }
     }
 
