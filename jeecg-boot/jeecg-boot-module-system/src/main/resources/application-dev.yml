@@ -18,6 +18,9 @@ management:
     web:
       exposure:
         include: metrics,httptrace
+  health:
+    elasticsearch:
+      enabled: false
 
 spring:
   servlet:
